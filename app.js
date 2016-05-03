@@ -50,6 +50,10 @@ app.controller('mainController', function($scope, $mdToast){
         );
     };
 
+    $scope.terminal.updateUI = function(){
+        $scope.$apply();
+    };
+
     $scope.sendClick = function () {
       console.log($scope.inputData);
       if ($scope.inputData === undefined) {

@@ -69,6 +69,7 @@
             arr.push(characteristic.value.getUint8(i));
         }
         window.terminal.terminaldata = window.terminal.terminaldata + hex;
+        window.terminal.updateUI();
     }
 
     /* Utils */
