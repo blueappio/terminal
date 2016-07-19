@@ -1,38 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Terminal</title>
-        <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.9.7/angular-material.min.css'>
-        <link rel="stylesheet" href="style.css">
-    </head>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-aria.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.8.2/angular-material.min.js'></script>
-    <script src="https://blueappio.github.io/blueapp.io/blueapp.io.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Terminal</title>
+    <link rel="stylesheet"
+          href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.1/angular-material-icons.min.js"></script>
+
+    <script src="https://vensi.github.io/blueapp.io/latest/blueapp.io.min.js"></script>
     <script src="terminal.js"></script>
     <script src="app.js"></script>
 
-    <body ng-app="terminal" class="thing">
-        <div ng-controller="mainController" md-theme-watch="true">
-              <div layout="row">
-                <div class="terminal-textfield terminal-textfiled-border"  flex="100">
-                    <textarea readonly>{{terminal.terminaldata}}</textarea>
-                </div>
-            </div>
-            <div layout="row" layout-align="start start">
-                <div flex="85" flex-gt-md="90" flex-gt-lg="90" flex-xs="50" flex-sm="65">
-                    <div class="terminal-textfield">
-                        <input type="text" placeholder="Enter Data to send" class="terminal-textfield" ng-model="inputData">
-                    </div>
-                </div>
-                <div>
-                    <md-button class="md-raised send-btn" ng-click="sendClick()"  ng-disabled="disable">Send</md-button>
-                </div>
+</head>
+
+<body ng-app="terminal" class="thing">
+
+<div ng-controller="mainController" md-theme-watch="true">
+
+    <div class="dialog-demo-content" style="position: absolute; right: 0px; top: 0px;">
+        <md-button class="md-icon-button md-primary" aria-label="Clear"
+                   ng-click="onClear()"
+                   ng-disabled="!terminal.connected">
+            <ng-md-icon icon="clear"></ng-md-icon>
+        </md-button>
+
+        <md-button class="md-icon-button md-primary" aria-label="Settings"
+                   ng-click="showSettingsDialog($event)"
+                   ng-disabled="!terminal.connected">
+            <ng-md-icon icon="settings"></ng-md-icon>
+        </md-button>
+    </div>
+
+    <div layout="row">
+        <div class="terminal-textfield terminal-textfiled-border" flex="100" style="top: 25px;">
+            <textarea readonly>{{terminaldata}}</textarea>
+        </div>
+    </div>
+
+    <div layout="row" layout-align="start start" ng-hide="!terminal.connected">
+        <div layout="column" flex="85" flex-gt-md="90" flex-gt-lg="90" flex-xs="65" flex-sm="80">
+            <div class="terminal-textfield" style="top: 20px;">
+                <input type="text" placeholder="Enter hex data to send" class="terminal-textfield" ng-model="inputData">
             </div>
         </div>
-    </body>
+        <div layout="column" flex="15" flex-gt-md="10" flex-gt-lg="10" flex-xs="35" flex-sm="20">
+            <md-button class="md-raised send-btn"
+                       ng-click="onSend()"
+                       style="top: 20px;">Send
+            </md-button>
+        </div>
+    </div>
+
+    <div layout="row" layout-align="start start" ng-hide="terminal.connected">
+        <md-button class="md-raised connect-btn"
+                   ng-click="onConnect()"
+                   style="top: 20px;">Connect
+        </md-button>
+    </div>
+
+</div>
+</body>
+
 </html>

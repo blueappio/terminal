@@ -1,0 +1,84 @@
+<md-dialog aria-label="Settings" ng-cloak>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Settings</h2>
+                <span flex></span>
+                <md-button class="md-icon-button md-primary" aria-label="Close" ng-click="cancel()">
+                    <ng-md-icon icon="clear"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container style="width:120px;">
+                    <label>Baud Rate</label>
+                    <md-select ng-model="baudRate">
+                        <md-option value="0">1200</md-option>
+                        <md-option value="1">2400</md-option>
+                        <md-option value="2">4800</md-option>
+                        <md-option value="3">9600</md-option>
+                        <md-option value="4">14400</md-option>
+                        <md-option value="5">19200</md-option>
+                        <md-option value="6">28800</md-option>
+                        <md-option value="7">38400</md-option>
+                        <md-option value="8">57600</md-option>
+                        <md-option value="9">76800</md-option>
+                        <md-option value="A">115200</md-option>
+                    </md-select>
+                </md-input-container>
+                <span flex></span>
+                <md-input-container style="width:120px;">
+                    <label>Flow Control</label>
+                    <md-select ng-model="flowControl">
+                        <md-option ng-value=1>Enable</md-option>
+                        <md-option ng-value=0>Disable</md-option>
+                    </md-select>
+                </md-input-container>
+                </br>
+                <md-input-container style="width:120px;">
+                    <label>Rx Pin</label>
+                    <md-select ng-model="rx" ng-disabled=true>
+                        <md-option ng-value="n" ng-repeat="n in [] | range:31" ng-selected="rx == n">{{ n }}</md-option>
+                    </md-select>
+                </md-input-container>
+                <span flex></span>
+                <md-input-container style="width:120px;">
+                    <label>Tx Pin</label>
+                    <md-select ng-model="tx" ng-disabled=true>
+                        <md-option ng-value="n" ng-repeat="n in [] | range:31" ng-selected="tx == n">{{ n }}</md-option>
+                    </md-select>
+                </md-input-container>
+                </br>
+                <md-input-container style="width:120px;" ng-if='flowControl'>
+                    <label>RTS Pin</label>
+                    <md-select ng-model="rts" ng-disabled=true>
+                        <md-option ng-value="n" ng-repeat="n in [] | range:31" ng-selected="rts == n">{{ n }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <span flex></span>
+                <md-input-container style="width:120px;" ng-if='flowControl'>
+                    <label>CTS Pin</label>
+                    <md-select ng-model="cts" ng-disabled=true>
+                        <md-option ng-value="n" ng-repeat="n in [] | range:31" ng-selected="cts == n">{{ n }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                </br>
+                <md-input-container style="width:120px;">
+                    <label>Parity</label>
+                    <md-select ng-model="parity">
+                        <md-option ng-value=0>NONE</md-option>
+                        <md-option ng-value=1>EVEN</md-option>
+                    </md-select>
+                </md-input-container>
+                <span flex></span>
+                <md-button class="md-fab" aria-label="save" style="fill: white; width: 45px; height: 45px;"
+                           ng-click="submitClick()">
+                    <ng-md-icon icon="done"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

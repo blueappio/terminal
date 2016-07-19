@@ -1,32 +1,42 @@
 .thing {
-  padding: 14px;
-  font-size: large;
-  font-weight: 500;
+    padding: 14px;
+    font-size: large;
+    font-weight: 500;
 }
-md-toast.md-success-toast-theme {
+
+md-toast.md-success-toast-theme .md-toast-content {
     background-color: green;
 }
-md-toast.md-error-toast-theme {
+
+md-toast.md-error-toast-theme .md-toast-content {
     background-color: red;
 }
+
+md-toast {
+    top: 10px;
+    right: 0px;
+}
+
 .terminal-textfield {
     display: block;
     padding-top: 15px;
     margin-bottom: 10px;
     position: relative;
 }
-.terminal-textfield>textarea {
+
+.terminal-textfield > textarea {
     min-height: 390px;
     width: 100%;
 }
-.terminal-textfield>input, .terminal-textfield>textarea {
+
+.terminal-textfield > input, .terminal-textfield > textarea {
     -webkit-animation-duration: .1ms;
     animation-duration: .1ms;
     -webkit-animation-name: mui-node-inserted;
     animation-name: mui-node-inserted;
     display: block;
     background-color: transparent;
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
     border: none;
     outline: 0;
     width: 100%;
@@ -36,32 +46,31 @@ md-toast.md-error-toast-theme {
     border-radius: 0;
     background-image: none;
 }
-.terminal-textfiled-border{
-	border: 1px solid #ccc;
+
+.terminal-textfiled-border {
+    border: 1px solid #ccc;
     padding: 6px;
 }
-.terminal-textfield>input {
+
+.terminal-textfield > input {
     height: 32px;
-    border-bottom: 1px solid rgba(0,0,0,.26);
+    border-bottom: 1px solid rgba(0, 0, 0, .26);
 }
-.send-btn{
-	background-color: #dc6767 !important;
-	color: #ffffff !important;
+
+.send-btn {
+    background-color: #28ade5 !important;
+    color: #ffffff !important;
 }
-.list-panel{
+
+.connect-btn {
+    background-color: #dc6767 !important;
+    color: #ffffff !important;
+}
+
+.list-panel {
     padding: 5px 15px 5px 15px;
     border-radius: 0;
     background-color: #FFF;
     border: 1px solid #E0E0E0;
     color: #797979;
 }
-.border-top-none{
-    border-top: none;
-}
-
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) { 
-    .font-size{
-        font-size: 12px;
-    }
-}
-
