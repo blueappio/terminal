@@ -5,8 +5,8 @@ var app;
     app = angular.module('terminal', ['ngMaterial', 'ngMdIcons'])
         .config(function ($mdThemingProvider) {
             $mdThemingProvider.theme('default')
-                .primaryPalette('blue-grey')
-                .accentPalette('blue');
+                .primaryPalette('blue')
+                .accentPalette('blue-grey');
             $mdThemingProvider.theme('success-toast');
             $mdThemingProvider.theme('error-toast');
             $mdThemingProvider.alwaysWatchTheme(true);
@@ -60,7 +60,7 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
             '<md-dialog-content>' +
             '<div layout="row" layout-align="center" style="padding: 40px;">' +
                 '<div style="padding-bottom: 20px;">' +
-                    '<md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" md-diameter="40" style="right: 20px;bottom: 10px;">' +
+                    '<md-progress-circular md-mode="indeterminate" md-diameter="40" style="right: 20px;bottom: 10px;">' +
                     '</md-progress-circular>' +
                 '</div>' +
             '</div>' +
