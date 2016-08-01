@@ -5,8 +5,8 @@ var app;
     app = angular.module('terminal', ['ngMaterial', 'ngMdIcons'])
         .config(function ($mdThemingProvider) {
             $mdThemingProvider.theme('default')
-                .primaryPalette('blue')
-                .accentPalette('pink');
+                .primaryPalette('blue-grey')
+                .accentPalette('blue');
             $mdThemingProvider.theme('success-toast');
             $mdThemingProvider.theme('error-toast');
             $mdThemingProvider.alwaysWatchTheme(true);

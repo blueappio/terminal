@@ -17,6 +17,12 @@ md-toast {
     right: 0px;
 }
 
+.connect-btn {
+    top: 20px;
+    background-color: rgb(21,101,192) !important;
+    color: #ffffff !important;
+}
+
 .terminal-textfield {
     display: block;
     padding-top: 15px;
