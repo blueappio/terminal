@@ -195,7 +195,7 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
         } else if (navigator.bluetooth.referringDevice) {
             $scope.onConnect();
         }
-    }, 2000);
+    }, 3000);
 
 });
 
