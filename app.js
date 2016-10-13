@@ -13,9 +13,23 @@ var app;
         })
 })();
 
-app.run(['$document', '$window', function($document, $window) {
+var match,
+    pl = /\+/g, // Regex for replacing addition symbol with a space
+    search = /([^&=]+)=?([^&]*)/g,
+    decode = function (s) {
+        return decodeURIComponent(s.replace(pl, " "));
+    },
+    query = window.location.search.substring(1);
+
+var urlParams = {};
+while (match = search.exec(query))
+    urlParams[decode(match[1])] = decode(match[2]);
+
+var cordovaApp = urlParams['app'];
+
+app.run(['$document', '$window', function ($document, $window) {
     var document = $document[0];
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         var hasFocus = document.hasFocus();
         if (!hasFocus) $window.focus();
     });
@@ -29,6 +43,14 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
 
     $scope.terminal = terminalService;
     $scope.terminaldata = '';
+    $scope.deviceName = $scope.terminal.deviceName;
+    $scope.isApp = false;
+
+    var util = new Util();
+
+    if (cordovaApp == 'true') {
+        $scope.isApp = true;
+    }
 
     function goodToast(message) {
         $mdToast.show(
@@ -59,10 +81,10 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
             template: '<md-dialog style="width: 250px;top:95px;margin-top: -170px;" aria-label="loadingDialog" ng-cloak>' +
             '<md-dialog-content>' +
             '<div layout="row" layout-align="center" style="padding: 40px;">' +
-                '<div style="padding-bottom: 20px;">' +
-                    '<md-progress-circular md-mode="indeterminate" md-diameter="40" style="right: 20px;bottom: 10px;">' +
-                    '</md-progress-circular>' +
-                '</div>' +
+            '<div style="padding-bottom: 20px;">' +
+            '<md-progress-circular md-mode="indeterminate" md-diameter="40" style="right: 20px;bottom: 10px;">' +
+            '</md-progress-circular>' +
+            '</div>' +
             '</div>' +
             '<div layout="row" layout-align="center" style="padding-bottom: 20px;">' +
             '<label>' + text + '</label>' +
@@ -74,6 +96,7 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
             },
             controller: DialogController
         });
+
         function DialogController($scope, $mdDialog, items) {
             $scope.items = items;
             $scope.closeDialog = function () {
@@ -96,12 +119,12 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
 
     $scope.showSettingsDialog = function (ev) {
         $mdDialog.show({
-                controller: SettingsController,
-                templateUrl: 'settings.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true
-            })
+            controller: SettingsController,
+            templateUrl: 'settings.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        })
             .then(function (answer) {
                 $scope.status = 'You said the information was "' + answer + '".';
             }, function () {
@@ -132,7 +155,9 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
 
         $scope.terminal.writeData(bufView)
             .then(function () {
-                $scope.terminaldata = $scope.terminaldata + ' <' + $scope.inputData + '>';
+                if ($scope.terminal.localEcho) {
+                    $scope.terminaldata = $scope.terminaldata + ' <' + $scope.inputData + '>';
+                }
                 $scope.inputData = '';
                 $scope.$apply();
             })
@@ -147,6 +172,7 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
             .then(function () {
                 dismissLoadingIndicator();
                 goodToast('Connected...');
+                $scope.$apply();
             })
             .catch(function (error) {
                 dismissLoadingIndicator();
@@ -155,11 +181,21 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
             });
     }
 
-    if (!navigator.bluetooth) {
-        badToast('Bluetooth not supported, which is required.');
-    } else if (navigator.bluetooth.referringDevice) {
-        $scope.onConnect();
+    $scope.onDisconnect = function () {
+        $scope.terminal.disconnect().then(function () {
+            console.log('Device disconnected successfully');
+            $scope.$apply();
+        });
     }
+
+    //Hack : waiting to load the plugin
+    setTimeout(function () {
+        if (!navigator.bluetooth) {
+            badToast('Bluetooth not supported, which is required.');
+        } else if (navigator.bluetooth.referringDevice) {
+            $scope.onConnect();
+        }
+    }, 2000);
 
 });
 
@@ -176,8 +212,22 @@ app.filter('range', function () {
 });
 
 function SettingsController($scope, $mdDialog, terminalService) {
+    $scope.isApp = false;
+
+    var util = new Util();
+
+    if (cordovaApp == 'true') {
+        $scope.isApp = true;
+    }
 
     $scope.terminal = terminalService;
+    $scope.deviceName = $scope.terminal.deviceName;
+
+    if ($scope.terminal.localEcho) {
+        $scope.localEcho = $scope.terminal.localEcho;
+    } else {
+        $scope.localEcho = false;
+    }
 
     if ($scope.terminal.configBuffer) {
         $scope.rx = $scope.terminal.configBuffer.getUint8(0);
@@ -206,9 +256,36 @@ function SettingsController($scope, $mdDialog, terminalService) {
     $scope.rts = 0;
     $scope.cts = 0;
 
+    $scope.toggleEcho = function () {
+        $scope.terminal.localEcho = $scope.localEcho;
+    };
+
     $scope.cancel = function () {
         $mdDialog.cancel();
     };
+
+    $scope.onDFUSelect = function () {
+        function dfuProcessResponse() {
+            console.log("response");
+        }
+
+        function dfuProcessError() {
+            console.log("error");
+        }
+
+        var message = {};
+        message.fileName = "BluTerm.zip";
+        message.backgroundColor = "white"; //background color to show progress
+        message.borderColor = "blue"; // border color to show progress
+        message.textColor = "blue"; // progress label color to show progress­
+        message.uuid = $scope.terminal.bluetoothDevice.uuid; // connected peripheral uuid 
+        message.hwVersion = $scope.terminal.hardwareVersion;
+        message.swVersion = $scope.terminal.softwareVersion;
+
+        setTimeout(function () {
+            dfuimpl.request('message', JSON.stringify(message), dfuProcessResponse, dfuProcessError); // To start dfu process
+        }, 3500);
+    }
 
     $scope.submitClick = function () {
         var cfgData = [];
@@ -221,7 +298,47 @@ function SettingsController($scope, $mdDialog, terminalService) {
 
         $scope.terminal.writeConfigData(new Uint8Array(cfgData))
             .then(function () {
-                $scope.cancel();
+                $scope.terminal.setDeviceName(new Uint8Array(util.stringToDecArray($scope.deviceName)))
+                    .then(function () {
+                        $scope.terminal.deviceName = $scope.deviceName;
+                        $scope.cancel();
+                    });
             });
     };
+}
+
+function Util() {
+    this.stringToDecArray = function (str) {
+        var dec, i;
+        var dec_arr = [];
+        if (str) {
+            for (i = 0; i < str.length; i++) {
+                dec = str.charCodeAt(i).toString(10);
+                dec_arr.push(Number(dec));
+            }
+        }
+        return dec_arr;
+    };
+
+    this.pushUniqueObj = function (array, item) {
+        var found = false,
+            idx = -1;
+        if (array) {
+            for (idx = 0; idx < array.length; idx++) {
+                if (array[idx].uuid === item.uuid) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                array.splice(idx, 1, item);
+                return array;
+            } else {
+                array.push(item);
+                return array;
+            }
+        }
+    };
+
+    return this;
 }

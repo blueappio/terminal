@@ -1,5 +1,5 @@
 .thing {
-    padding: 14px;
+    padding: 0px;
     font-size: large;
     font-weight: 500;
 }
@@ -15,12 +15,6 @@ md-toast.md-error-toast-theme .md-toast-content {
 md-toast {
     top: 10px;
     right: 0px;
-}
-
-.connect-btn {
-    top: 20px;
-    background-color: rgb(21,101,192) !important;
-    color: #ffffff !important;
 }
 
 .terminal-textfield {
@@ -68,15 +62,44 @@ md-toast {
     color: #ffffff !important;
 }
 
-.connect-btn {
-    background-color: #dc6767 !important;
-    color: #ffffff !important;
-}
-
 .list-panel {
     padding: 5px 15px 5px 15px;
     border-radius: 0;
     background-color: #FFF;
     border: 1px solid #E0E0E0;
     color: #797979;
+}
+
+/* ---------------------- */
+.heading {
+    background-color: #14181C;
+    height: 40px;
+}
+
+.heading-text {
+    font-size: 22px;
+    color: #fff;
+    padding-top: 4px;
+}
+
+.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.logo {
+    width: 100px;
+    height: 27px;
+    background-image: url(images/logo.png);
+    background-repeat: no-repeat;
+    margin: 0px auto;
+    margin-bottom: 0px;
+}
+
+/*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+    .logo {
+        background-image: url(images/logo@2x.png);
+        background-size: 100px 27px;
+    }
 }

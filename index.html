@@ -5,70 +5,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Origin Trial Token -->
-    <meta http-equiv="origin-trial" content="AtgOYVRO5xlsm/3qCzZ701Hx8qTUrCUbFVML9Z8E9vELP5w9K9E73YWGBQc4Ivy0hGd+++sh7JUtKx+3EuV3ngkAAABeeyJvcmlnaW4iOiAiaHR0cHM6Ly9ibHVlYXBwaW8uZ2l0aHViLmlvOjQ0MyIsICJmZWF0dXJlIjogIldlYkJsdWV0b290aCIsICJleHBpcnkiOiAxNDc2ODE1NjAyfQ==" />
+    <meta http-equiv="origin-trial"
+          content="AtgOYVRO5xlsm/3qCzZ701Hx8qTUrCUbFVML9Z8E9vELP5w9K9E73YWGBQc4Ivy0hGd+++sh7JUtKx+3EuV3ngkAAABeeyJvcmlnaW4iOiAiaHR0cHM6Ly9ibHVlYXBwaW8uZ2l0aHViLmlvOjQ0MyIsICJmZWF0dXJlIjogIldlYkJsdWV0b290aCIsICJleHBpcnkiOiAxNDc2ODE1NjAyfQ=="/>
     <title>Terminal</title>
     <link rel="stylesheet"
           href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css">
     <link rel="stylesheet" href="style.css">
-
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.1/angular-material-icons.min.js"></script>
-
-    <script src="https://blueappio.github.io/blueapp.io/blueapp.io.min.js"></script>
+    <script src="cordova/cordova-init.js"></script>
+    <script src="https://blueappio.github.io/blueapp.io/1.1.0/blueapp.io.min.js"></script>
     <script src="terminal.js"></script>
     <script src="app.js"></script>
-
 </head>
 
-<body ng-app="terminal" class="thing">
-
+<body ng-app='terminal' class="thing">
 <div ng-controller="mainController" md-theme-watch="true">
+    <div id='scanDialog'></div>
+    <div class="row heading" flex="100" layout="row">
+        <div class="dialog-demo-content" style="position: absolute; left: 0px; width: 62px;">
+            <md-button class="md-icon-button md-primary" aria-label="Settings" ng-disabled="!terminal.connected"
+                       ng-click="showSettingsDialog($event)">
+                <md-icon md-svg-icon="images/settings.svg" style="color: #3e3737;"></md-icon>
+            </md-button>
+        </div>
+        <div class="logo" style="margin-top: 6px;"></div>
+        <!-- <div layout="column" flex="80" class="heading-text" style="padding-left: 7px;">{{terminal.deviceName}}</div> -->
+        <div layout="column" flex="20" layout-align="center end"
+             style="position: absolute; right: 0px; width: 62px; margin-top: -3px;" ng-hide="terminal.connected">
+            <md-button style="text-transform: capitalize !important; color: white;" ng-click="onConnect()">
+                Connect
+            </md-button>
 
-    <div class="dialog-demo-content" style="position: absolute; right: 0px; top: 0px;">
-        <md-button class="md-icon-button md-primary" aria-label="Clear"
-                   ng-click="onClear()"
-                   ng-disabled="!terminal.connected">
-            <ng-md-icon icon="clear"></ng-md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button md-primary" aria-label="Settings"
-                   ng-click="showSettingsDialog($event)"
-                   ng-disabled="!terminal.connected">
-            <ng-md-icon icon="settings"></ng-md-icon>
-        </md-button>
+        </div>
+        <div layout="column" flex="20" layout-align="center end"
+             style="position: absolute; right: 0px; width: 62px; margin-top: -3px;"
+             ng-show="terminal.connected && isApp">
+            <md-button style="text-transform: capitalize !important; color: white;" ng-click="onDisconnect()">
+                Disconnect
+            </md-button>
+        </div>
     </div>
-
-    <div layout="row">
+    <div style="margin-left: 15px;padding-top: 10px;color: #4aade2;"
+         ng-show="terminal.deviceName && terminal.connected">
+        {{terminal.deviceName}}
+    </div>
+    <div layout="row" style="padding-left:14px;padding-right:14px;">
         <div class="terminal-textfield terminal-textfiled-border" flex="100" style="top: 25px;">
             <textarea readonly>{{terminaldata}}</textarea>
         </div>
     </div>
-
-    <div layout="row" layout-align="start start" ng-hide="!terminal.connected">
+    <div style="text-align: right; margin-top: -20px; margin-right: 7px;">
+        <md-button class="md-icon-button" aria-label="Settings" ng-disabled="!terminal.connected"
+                   ng-click="onClear()">
+            <md-icon md-svg-icon="images/clear-button.svg"
+                     style="color: #3e3737; height: 16px; min-height: 0px;"></md-icon>
+        </md-button>
+    </div>
+    <div layout="row" layout-align="start start" ng-hide="!terminal.connected"
+         style="padding-left:14px;padding-right:14px;">
         <div layout="column" flex="85" flex-gt-md="90" flex-gt-lg="90" flex-xs="65" flex-sm="80">
             <div class="terminal-textfield" style="top: 20px;">
                 <input type="text" placeholder="Enter hex data to send" class="terminal-textfield" ng-model="inputData">
             </div>
         </div>
         <div layout="column" flex="15" flex-gt-md="10" flex-gt-lg="10" flex-xs="35" flex-sm="20">
-            <md-button class="md-raised send-btn"
-                       ng-click="onSend()"
-                       style="top: 20px;">Send
+            <md-button class="md-raised send-btn" ng-click="onSend()" style="top: 20px;">Send
             </md-button>
         </div>
     </div>
-
-    <div layout="row" layout-align="start start" ng-hide="terminal.connected">
-        <md-button class="md-raised connect-btn"
-                   ng-click="onConnect()"
-                   style="top: 20px;">Connect
-        </md-button>
-    </div>
-
 </div>
 </body>
 
