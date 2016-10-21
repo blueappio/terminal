@@ -5,16 +5,18 @@ var standalone = window.navigator.standalone,
     ios = /iphone|ipod|ipad/.test(userAgent),
     androidversion = /version/.test(userAgent),
     android = /android/.test(userAgent);
-if (ios) {
-    if (!standalone && !safari) {
-        //uiwebview
-        fileToInclude = 'cordova/iOS/cordova.js';
-    }
-} else if (android) {
-    //not iOS
-    if (androidversion && android) {
-        //Android webview
-        fileToInclude = 'cordova/android/cordova.js';
+if(cordovaApp){
+    if (ios) {
+        if (!standalone && !safari) {
+            //uiwebview
+            fileToInclude = 'cordova/iOS/cordova.js';
+        }
+    } else if (android) {
+        //not iOS
+        if (androidversion && android) {
+            //Android webview
+            fileToInclude = 'cordova/android/cordova.js';
+        }
     }
 }
 
