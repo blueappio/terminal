@@ -111,16 +111,16 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
 
     function connectCall(){
         $scope.terminal.connect()
-                .then(function () {
-                    dismissLoadingIndicator();
-                    goodToast('Connected...');
-                    $scope.$apply();
-                })
-                .catch(function (error) {
-                    dismissLoadingIndicator();
-                    console.error('Argh!', error, error.stack ? error.stack : '');
-                    badToast('Unable to connect.');
-                });
+            .then(function () {
+                dismissLoadingIndicator();
+                goodToast('Connected...');
+                $scope.$apply();
+            })
+            .catch(function (error) {
+                dismissLoadingIndicator();
+                console.error('Argh!', error, error.stack ? error.stack : '');
+                badToast('Unable to connect.');
+            });
     }
 
     $scope.terminal.updateUI = function (value) {
@@ -185,7 +185,7 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
         if($scope.isApp){
             setTimeout(function () {
                 connectCall();
-            }, 1200);
+            }, 1500);
         }
         else{
             connectCall();
