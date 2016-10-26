@@ -109,6 +109,20 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
         $mdDialog.cancel();
     };
 
+    function connectCall(){
+        $scope.terminal.connect()
+                .then(function () {
+                    dismissLoadingIndicator();
+                    goodToast('Connected...');
+                    $scope.$apply();
+                })
+                .catch(function (error) {
+                    dismissLoadingIndicator();
+                    console.error('Argh!', error, error.stack ? error.stack : '');
+                    badToast('Unable to connect.');
+                });
+    }
+
     $scope.terminal.updateUI = function (value) {
         var tmpArray = new Uint8Array(value.buffer);
         for (var i = 0; i < tmpArray.length; i++) {
@@ -168,17 +182,14 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
 
     $scope.onConnect = function () {
         showLoadingIndicator('', 'Connecting ....');
-        $scope.terminal.connect()
-            .then(function () {
-                dismissLoadingIndicator();
-                goodToast('Connected...');
-                $scope.$apply();
-            })
-            .catch(function (error) {
-                dismissLoadingIndicator();
-                console.error('Argh!', error, error.stack ? error.stack : '');
-                badToast('Unable to connect.');
-            });
+        if($scope.isApp){
+            setTimeout(function () {
+                connectCall();
+            }, 1200);
+        }
+        else{
+            connectCall();
+        }
     }
 
     $scope.onDisconnect = function () {
