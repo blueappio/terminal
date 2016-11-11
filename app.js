@@ -177,7 +177,7 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
             .catch(function (error) {
                 dismissLoadingIndicator();
                 console.error('Argh!', error, error.stack ? error.stack : '');
-                badToast('Unable to connect.');
+                badToast(error);
             });
     }
 
