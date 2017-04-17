@@ -52,6 +52,9 @@ app.controller('mainController', function ($scope, $mdToast, $mdDialog, terminal
         $scope.isApp = true;
     }
 
+    // Disabling the mouse right click event
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
     function goodToast(message) {
         $mdToast.show(
             $mdToast.simple()
